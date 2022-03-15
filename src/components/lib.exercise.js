@@ -1,4 +1,6 @@
-import styled from '@emotion/styled'
+//2-2- styling input and Formgroup styles here 
+
+import styled from '@emotion/styled/'
 import {Dialog as ReachDialog} from '@reach/dialog'
 
 // 🐨 create a button styled component here called "Button"
@@ -40,6 +42,43 @@ import {Dialog as ReachDialog} from '@reach/dialog'
 //   display: 'flex',
 //   flexDirection: 'column',
 
+//2-1-h- adding buttonVariants styles and copy variant styles
+const buttonVariants = {
+  primary:{
+    background: '#3f51b5',
+    color: 'white',
+  },
+  secondary:{
+  background: "#f1f2f7",
+  color: "#434449",
+  }
+}
+
+//2-1-d- adding Button styled comp and copy the styles above
+//2-1-g- we can add any no. for params here with commas and adding styles to it with buttonVariant 
+const Button = styled.button({
+    padding: '10px 15px',
+  border: '0',
+  lineHeight: '1',
+  borderRadius: '3px',
+}, ({variant='primary'}) => buttonVariants[variant])
+
+
+//2-2-a- adding input style const and copying Input styles from above
+const Input = styled.input({
+  borderRadius: '3px',
+  border: `1px solid #f1f1f4`,
+  background: "#f1f2f7",
+  padding: '8px 12px',
+})
+
+//2-2-b- adding formGroup style const and copying Input styles from above
+const FormGroup = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+});
+
+
 // 💰 I'm giving a few of these to you:
 const CircleButton = styled.button({
   borderRadius: '30px',
@@ -51,7 +90,7 @@ const CircleButton = styled.button({
   alignItems: 'center',
   justifyContent: 'center',
   background: 'white',
-  color: '#434449',
+  color: "#434449",
   border: `1px solid #f1f1f4`,
   cursor: 'pointer',
 })
@@ -62,10 +101,10 @@ const Dialog = styled(ReachDialog)({
   paddingBottom: '3.5em',
   boxShadow: '0 10px 30px -5px rgba(0, 0, 0, 0.2)',
   margin: '20vh auto',
-  '@media (max-width: 991px)': {
+  "@media (max-width: 991px)": {
     width: '100%',
     margin: '10vh auto',
   },
 })
 
-export {CircleButton, Dialog}
+export {CircleButton, Dialog,Button,Input,FormGroup}
