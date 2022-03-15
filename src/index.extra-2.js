@@ -1,10 +1,14 @@
+// 💯 Create a LoginForm component
+
 import '@reach/dialog/styles.css'
 import * as React from 'react'
 import ReactDOM from 'react-dom'
 import {Dialog} from '@reach/dialog'
 import {Logo} from './components/logo'
 
+//1-3-a - creating loginForm comp- taking onSubmit fields from respective forms and buttonTexts as well
 function LoginForm({onSubmit, buttonText}) {
+  //1-3-c- creating event handler function
   function handleSubmit(event) {
     event.preventDefault()
     const {username, password} = event.target.elements
@@ -14,12 +18,12 @@ function LoginForm({onSubmit, buttonText}) {
       password: password.value,
     })
   }
-
+  //1-3-b - returning html with attached events
   return (
     <form onSubmit={handleSubmit}>
       <div>
         <label htmlFor="username">Username</label>
-        <input id="username" />
+        <input id="username" type="text"/>
       </div>
       <div>
         <label htmlFor="password">Password</label>
@@ -58,6 +62,7 @@ function App() {
           <button onClick={() => setOpenModal('none')}>Close</button>
         </div>
         <h3>Login</h3>
+        {/* //1-3-f adding login form comp and its props as well and its formsubmission handler  */}
         <LoginForm onSubmit={login} buttonText="Login" />
       </Dialog>
       <Dialog aria-label="Registration form" isOpen={openModal === 'register'}>
@@ -65,6 +70,7 @@ function App() {
           <button onClick={() => setOpenModal('none')}>Close</button>
         </div>
         <h3>Register</h3>
+        {/* //1-3-e adding register form comp and its props as well and its formsubmission handler  */}
         <LoginForm onSubmit={register} buttonText="Register" />
       </Dialog>
     </div>
