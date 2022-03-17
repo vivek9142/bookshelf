@@ -2,10 +2,12 @@ const apiURL = process.env.REACT_APP_API_URL
 
 function client(
   endpoint,
+  // 1-2-c- taking token out and yake custom headers out of there 
   {token, headers: customHeaders, ...customConfig} = {},
 ) {
   const config = {
     headers: {
+      //1-2-d- if auth is present then add bearer else undefined
       Authorization: token ? `Bearer ${token}` : undefined,
       ...customHeaders,
     },
