@@ -1,3 +1,6 @@
+//use function of API client  for api request to make it less cluterred
+
+
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
@@ -7,56 +10,36 @@ import Tooltip from '@reach/tooltip'
 import {FaSearch} from 'react-icons/fa'
 import {Input, BookListUL, Spinner} from './components/lib'
 import {BookRow} from './components/book-row'
-// 🐨 import the client from './utils/api-client'
+//1-2-a- import client 
+import {client} from './utils/api-client'
 
 function DiscoverBooksScreen() {
-  // 1-1-b- 🐨 add state for status ('idle', 'loading', or 'success'), data, and query
-  //1-1-k - add status state
   const [status, setStatus] = React.useState('idle')
   const [query,setQuery] = React.useState('');
-
-   // 🐨 you'll also notice that we don't want to run the search until the
-  // user has submitted the form, so you'll need a boolean for that as well
-  // 💰 I called it "queried"
-  //1-1-e- state for queried if it is done by user or not
   const [queried, setQueried] = React.useState(false);
-  //1-1-h - remove line of data and add state for data 
-  // const data = null // 💣 remove this, it's just here so the example doesn't explode
   const [data,setData] = React.useState(null)
-
-  // 1-1-d- 🐨 Add a useEffect callback here for making the request with the
-  // client and updating the status and data.
-  // 💰 Here's the endpoint you'll call: `books?query=${encodeURIComponent(query)}`
-  // 🐨 remember, effect callbacks are called on the initial render too
-  // so you'll want to check if the user has submitted the form yet and if
-  // they haven't then return early (💰 this is what the queried state is for).
-
+  
   React.useEffect(()=>{
-    //1-1-f - add if not queried then return
     if(!queried) {return}
     
     setStatus('loading');
-    window.fetch(`${process.env.REACT_APP_API_URL}/books?query=${encodeURIComponent(query)}`)
-    .then(response => response.json())
+    //1-2-b- remove the commented code and place this code in api client
+    // window.fetch(`${process.env.REACT_APP_API_URL}/books?query=${encodeURIComponent(query)}`)
+    // .then(response => response.json())
+    client(`books?query=${encodeURIComponent(query)}`)
     .then(responseData => {
-      //1-1-i- add set state when data is received
       setData(responseData)
       setStatus('success')
     })
   },[query,queried]);
 
-  // 1-1-j🐨 replace these with derived state values based on the status state.
   const isLoading = status === 'loading'
   const isSuccess = status === 'success'
 
   function handleSearchSubmit(event) {
-    // 🐨 1-1-a- call preventDefault on the event so you don't get a full page reload
     event.preventDefault();
-    // 1-1-g-🐨 set the queried state to true
     setQueried(true)
-    // 1-1-c🐨 set the query value which you can get from event.target.elements
     setQuery(event.target.elements.search.value);
-    // 💰 console.log(event.target.elements) if you're not sure.
   }
 
   return (

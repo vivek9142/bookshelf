@@ -1,3 +1,5 @@
+//1-4- use custom hook for refactoring of code
+
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
@@ -8,18 +10,48 @@ import {Input, BookListUL, Spinner} from './components/lib'
 import {BookRow} from './components/book-row'
 import {client} from './utils/api-client'
 import * as colors from './styles/colors'
+//1-4-a- import useAsync
 import {useAsync} from './utils/hooks'
 
 function DiscoverBooksScreen() {
+  //1-4-d- call custom hook useAsync and take values form it
+  //run is responsible for execution of async func and it update data,error and status values
   const {data, error, run, isLoading, isError, isSuccess} = useAsync()
+
   const [query, setQuery] = React.useState()
   const [queried, setQueried] = React.useState(false)
+
+  //1-4-a- removing data,error states and also derieved values
+
+  // const [data, setData] = React.useState()
+  // const [error, setError] = React.useState(null)
+
+  // const isLoading = status === 'loading'
+  // const isSuccess = status === 'success'
+  // const isError = status === 'error'
 
   React.useEffect(() => {
     if (!queried) {
       return
     }
+    //1-4-b- removing loading status value
+    //setStatus('loading')
+
+    //1-4-c- removing the then part from here and add client func in run taken from useAsync
+    // client(`books?query=${encodeURIComponent(query)}`)
+    // .then(
+    //   responseData => {
+    //     setData(responseData)
+    //     setStatus('success')
+    //   },
+    //   errorData => {
+    //     setError(errorData)
+    //     setStatus('error')
+    //   },
+    // )
+
     run(client(`books?query=${encodeURIComponent(query)}`))
+    //1-4-e- add run in dependency list
   }, [query, queried, run])
 
   function handleSearchSubmit(event) {
