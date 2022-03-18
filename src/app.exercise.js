@@ -6,7 +6,9 @@ import * as auth from 'auth-provider'
 // React Router DOM exposes a context provider that all the React Router
 // components use to implicitly access the router data. We need to wrap our
 // AuthenticatedApp in the router
-// 🐨 import the BrowserRouter from 'react-router-dom'
+
+// 1-1-a- 🐨 import the BrowserRouter from 'react-router-dom'
+import {BrowserRouter as Router} from 'react-router-dom'
 import {FullPageSpinner} from './components/lib'
 import * as colors from './styles/colors'
 import {client} from './utils/api-client'
@@ -73,9 +75,11 @@ function App() {
 
   if (isSuccess) {
     const props = {user, login, register, logout}
-    // 🐨 wrap the BrowserRouter around the AuthenticatedApp
+    // 1-1-b- 🐨 wrap the BrowserRouter around the AuthenticatedApp. go to authenticated ex app
     return user ? (
-      <AuthenticatedApp {...props} />
+      <Router>
+        <AuthenticatedApp {...props} />
+      </Router>
     ) : (
       <UnauthenticatedApp {...props} />
     )

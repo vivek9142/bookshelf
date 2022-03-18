@@ -1,3 +1,18 @@
+// 💯 handle URL redirects
+//Redirects with client side routers are interesting because 
+//traditionally users would do the client side router and things would work pretty good that way
+// you can have all routes defined in one place but the problem with that is Search engines and
+//browsers don't get the proper status codes for these so you will get dinged for SEO context as well 
+// as the browsers behaving properly for your redirects because  you can't 301,302 status for that.
+
+//so it is better to do the redirect through the CDN or server that you're actually using and there are
+//three contexts where we're using servers for our application so we're gonna configure all three of them
+
+//so we're using create-react-app and we havbe some functionality here for setting up proxy which will 
+//allow us to modify the express server that is running our development server
+
+//go to setupProxy.exercise file
+
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
