@@ -1,15 +1,16 @@
 /** @jsx jsx */
 
-//1-5- if a list item is present in list we show the rating if the book has been read
-//1-6- implement full rating feature - go to rating.exercise
 
 import {jsx} from '@emotion/core'
 
 import {Link} from 'react-router-dom'
-//1-5-a- 🐨 get useQuery from react-query
-// 🐨 you'll also need the client from 'utils/api-client'
-import { useQuery } from 'react-query';
-import { client } from 'utils/api-client.exercise';
+
+//1-13-e- import useListItem
+import { useListItem } from 'utils/list-items.exercise';
+
+//1-13-g- remove unwanted dependencies
+// import { useQuery } from 'react-query';
+// import { client } from 'utils/api-client.exercise';
 import * as colors from 'styles/colors'
 import {StatusButtons} from './status-buttons'
 import {Rating} from './rating'
@@ -19,20 +20,15 @@ import * as mq from 'styles/media-queries';
 function BookRow({user, book}) {
   const {title, author, coverImageUrl} = book
 
-  // 1-5-b- 🐨 call useQuery here to get the list item
-  // queryKey should be 'list-items'
-  // queryFn should be a call to the list-items endpoint
-  //we took the same queery code we have in our status button and pasted here.
-  const {data:listItems} = useQuery({
-    queryKey: 'list-items',
-    queryFn: ()=> client('list-items',{token:user.token}).then(data => data.listItems)
-  });
-  
+  //1-13- f- remove these lines add  following lines
+  // const {data:listItems} = useQuery({
+  //   queryKey: 'list-items',
+  //   queryFn: ()=> client('list-items',{token:user.token}).then(data => data.listItems)
+  // });
 
+  // const listItem = listItems?.find(li => li.bookId === book.id) ?? null;
 
-  //1-5-c- 🐨 assign listItem to the list item that has the same bookId as the book.id
-  //we took the same list item code we have in our status button and pasted here.
-  const listItem = listItems?.find(li => li.bookId === book.id) ?? null;
+  const listItem = useListItem(user,book.id)
 
   const id = `book-row-book-${book.id}`
 

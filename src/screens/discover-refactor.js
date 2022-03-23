@@ -1,64 +1,61 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
-//1-7- update the search feature with react query as well - goto discover.exercise
-
 import * as React from 'react'
 import Tooltip from '@reach/tooltip'
 import {FaSearch, FaTimes} from 'react-icons/fa'
-// 1-7-a- 🐨 you'll need useQuery from 'react-query'
-import {useQuery} from 'react-query';
-//1-7-d- commmenting since it is not in use  
-// import {useAsync} from 'utils/hooks'
 
-import {client} from 'utils/api-client'
+
+//1-21- while add the list in the reading list we're getting some refetching after moving out and refetching the same 
+//list - so we're removing the cache and prefetching the clist items.
+
+//1-11-i remove the unwanted dependency
+// import {useQuery} from 'react-query';
+// import {client} from 'utils/api-client'
+
+//1-11-g- import useBookSearch customHook you created
+//1-21-a- import refetchBookSearchQuery
+import { useBookSearch , refetchBookSearchQuery} from 'utils/books';
+
 import * as colors from 'styles/colors'
 import {BookRow} from 'components/book-row'
 import {BookListUL, Spinner, Input} from 'components/lib'
-import bookPlaceholderSvg from 'assets/book-placeholder.svg'
 
-const loadingBook = {
-  title: 'Loading...',
-  author: 'loading...',
-  coverImageUrl: bookPlaceholderSvg,
-  publisher: 'Loading Publishing',
-  synopsis: 'Loading...',
-  loadingBook: true,
-}
+//1-11-j - remove this too
+// import bookPlaceholderSvg from 'assets/book-placeholder.svg'
 
-const loadingBooks = Array.from({length: 10}, (v, index) => ({
-  id: `loading-book-${index}`,
-  ...loadingBook,
-}))
+// const loadingBook = {
+//   title: 'Loading...',
+//   author: 'loading...',
+//   coverImageUrl: bookPlaceholderSvg,
+//   publisher: 'Loading Publishing',
+//   synopsis: 'Loading...',
+//   loadingBook: true,
+// }
+
+// const loadingBooks = Array.from({length: 10}, (v, index) => ({
+//   id: `loading-book-${index}`,
+//   ...loadingBook,
+// }))
 
 function DiscoverBooksScreen({user}) {
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState(false)
-  // 1-7-b- 🐨 replace this useAsync call with a useQuery call to handle the book search
-  // the queryKey should be ['bookSearch', {query}]
-  // the queryFn should be the same thing we have in the run function below
-  // you'll get back the same stuff you get from useAsync, (except the run function)
-  // const {data, error, run, isLoading, isError, isSuccess} = useAsync()
 
-  const {data:books = loadingBooks, error, isLoading, isError, isSuccess} = useQuery({
-    queryKey: ['bookSearch',{query}],
-    queryFn:() => client(`books?query=${encodeURIComponent(query)}`,{
-      token:user.token
-    }).then(data => data.books)
-  })
 
-  // const books = data ?? loadingBooks
+  //1-21-b - add useEffect and add refetchBookSearchQuery func here
+  React.useEffect(() => {
+    refetchBookSearchQuery(user)
+  },[user])
+  
+  //1-11-h- remove this stuff with the following data
+  // const {data:books = loadingBooks, error, isLoading, isError, isSuccess} = useQuery({
+  //   queryKey: ['bookSearch',{query}],
+  //   queryFn:() => client(`books?query=${encodeURIComponent(query)}`,{
+  //     token:user.token
+  //   }).then(data => data.books)
+  // })
 
-  //1-7-c- commmenting the useEffect code
-  // React.useEffect(() => {
-  //   if (!queried) {
-  //     return
-  //   }
-  //   run(
-  //     client(`books?query=${encodeURIComponent(query)}`, {
-  //       token: user.token,
-  //     }).then(data => data.books),
-  //   )
-  // }, [query, queried, run, user.token])
+  const {books, error, isLoading, isError, isSuccess} = useBookSearch(query,user)
 
   function handleSearchSubmit(event) {
     event.preventDefault()

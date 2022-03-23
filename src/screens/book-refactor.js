@@ -1,73 +1,64 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
-//1-8- using react query to load info for specific book and add rating and note textarea - go to book.exercise
+
 
 import * as React from 'react'
 import debounceFn from 'debounce-fn'
 import {FaRegCalendarAlt} from 'react-icons/fa'
 import Tooltip from '@reach/tooltip'
 import {useParams} from 'react-router-dom'
-// 1-8-a- 🐨 you'll need these:
-import {useQuery, useMutation, queryCache} from 'react-query'
+//1-14-d remove unwanted dependencies
+// import { useMutation, queryCache} from 'react-query'
+// import {useQuery} from 'react-query'
+// import {client} from 'utils/api-client'
 
-//1-8-b- commmenting useAsync
-// import {useAsync} from 'utils/hooks'
-import {client} from 'utils/api-client'
+//1-12-d- import useBook customHook you created
+import { useBook } from 'utils/books.exercise';
+
 import {formatDate} from 'utils/misc'
 import * as mq from 'styles/media-queries'
 import * as colors from 'styles/colors'
 import {Textarea} from 'components/lib'
 import {Rating} from 'components/rating'
 import {StatusButtons} from 'components/status-buttons'
-import bookPlaceholderSvg from 'assets/book-placeholder.svg'
+//1-14-c - import useUpdateListItems
+import { useListItem,useUpdatedListItem } from 'utils/list-items.exercise'
 
-const loadingBook = {
-  title: 'Loading...',
-  author: 'loading...',
-  coverImageUrl: bookPlaceholderSvg,
-  publisher: 'Loading Publishing',
-  synopsis: 'Loading...',
-  loadingBook: true,
-}
+//1-12-f- remove these loadingBook and svg related to it
+// import bookPlaceholderSvg from 'assets/book-placeholder.svg'
+
+// const loadingBook = {
+//   title: 'Loading...',
+//   author: 'loading...',
+//   coverImageUrl: bookPlaceholderSvg,
+//   publisher: 'Loading Publishing',
+//   synopsis: 'Loading...',
+//   loadingBook: true,
+// }
 
 function BookScreen({user}) {
   const {bookId} = useParams()
-  // 1-8-c- 💣 remove the useAsync call here
-  // const {data, run} = useAsync()
-
-  // 1-8-e- 🐨 call useQuery here
-  // queryKey should be ['book', {bookId}]
-  // queryFn should be what's currently passed in the run function below
-  const {data: book = loadingBook} = useQuery({
-    queryKey: ['book', {bookId}],
-    queryFn: () =>
-      client(`books/${bookId}`, {token: user.token}).then(data => data.book),
-  })
-  // 1-8-d - 💣 remove the useEffect here (react-query will handle that now)
-  // React.useEffect(() => {
-  //   run(client(`books/${bookId}`, {token: user.token}))
-  // }, [run, bookId, user.token])
-
-  // 1-8-f-🐨 call useQuery to get the list item from the list-items endpoint
-  // queryKey should be 'list-items'
-  // queryFn should call the 'list-items' endpoint with the user's token
-  //copy query func and list item logic from statusbuttonex-34
-  const {data:listItems} = useQuery({
-    queryKey: 'list-items',
-    queryFn: ()=> client('list-items',{token:user.token}).then(data => data.listItems)
-  });
-  const listItem = listItems?.find(li => li.bookId === book.id) ?? null;
-
-  //1-8-g- remove this
-  // const listItem = null
   
-  // 🦉 NOTE: the backend doesn't support getting a single list-item by it's ID
-  // and instead expects us to cache all the list items and look them up in our
-  // cache. This works out because we're using react-query for caching!
+  //1-12-e- replace this with following data
+  // const {data: book = loadingBook} = useQuery({
+  //   queryKey: ['book', {bookId}],
+  //   queryFn: () =>
+  //     client(`books/${bookId}`, {token: user.token}).then(data => data.book),
+  // })
 
-  //1-8-e- remove this also
-  // const book = data?.book ?? loadingBook
+  const book = useBook(bookId,user);
+
+  //1-14-e - we're still using queries here so refactoring it. import useListItem
+  //replace these lines with following lines
+  // const {data:listItems} = useQuery({
+  //   queryKey: 'list-items',
+  //   queryFn: ()=> client('list-items',{token:user.token}).then(data => data.listItems)
+  // });
+  // const listItem = listItems?.find(li => li.bookId === book.id) ?? null;
+
+  const listItem = useListItem(user,bookId);
+
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
   return (
@@ -150,20 +141,15 @@ function ListItemTimeframe({listItem}) {
 }
 
 function NotesTextarea({listItem, user}) {
-  // 🐨 call useMutation here
-  //1-8-h-  the mutate function should call the list-items/:listItemId endpoint with a PUT
-  //   and the updates as data. The mutate function will be called with the updates
-  //   you can pass as data.
-  const [mutate] = useMutation(
-    (updates)=> client(`list-items/${updates.id}`,{method:'PUT',data: updates,token:user.token}),
-    {onSettled: ()=> queryCache.invalidateQueries('list-items')}
-  )
-  // 💰 if you want to get the list-items cache updated after this query finishes
-  // the use the `onSettled` config option to queryCache.invalidateQueries('list-items')
-  // 💣 DELETE THIS ESLINT IGNORE!! Don't ignore the exhaustive deps rule please
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  //1-8-i- remove this line
-  // const mutate = () => {}
+ 
+  //1-14-d- replace the lines with following code
+  // const [mutate] = useMutation(
+  //   (updates)=> client(`list-items/${updates.id}`,{method:'PUT',data: updates,token:user.token}),
+  //   {onSettled: ()=> queryCache.invalidateQueries('list-items')}
+  // )
+
+  const [mutate] = useUpdatedListItem(user);
+
   const debouncedMutate = React.useMemo(
     () => debounceFn(mutate, {wait: 300}),
     [mutate],

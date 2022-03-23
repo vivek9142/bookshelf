@@ -1,6 +1,8 @@
-export * from './discover.final'
+// export * from './discover.final'
 
 // export * from './discover.exercise'
+
+export * from './discover-refactor';
 
 // 💯 Make hooks
 // export * from './discover.extra-1'

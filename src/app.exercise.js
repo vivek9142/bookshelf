@@ -1,10 +1,14 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
+//1-10 - if the user logs out the application so we need to clear the book list items here so \
+//another user don't use it or data is present indefinately
+
 import * as React from 'react'
 import * as auth from 'auth-provider'
 import {BrowserRouter as Router} from 'react-router-dom'
-// 🐨 you'll need the queryCache from react-query
+// 1-10-a - 🐨 you'll need the queryCache from react-query
+import {queryCache} from 'react-query';
 import {FullPageSpinner} from './components/lib'
 import * as colors from './styles/colors'
 import {client} from './utils/api-client'
@@ -44,7 +48,9 @@ function App() {
   const register = form => auth.register(form).then(user => setData(user))
   const logout = () => {
     auth.logout()
-    // 🐨 clear the query cache with queryCache.clear()
+    // 1-10-b- 🐨 clear the query cache with queryCache.clear()
+    //1-10 - c- if user tries ot do an unauthenticated req so we need ot invalidate it go to - api-client-ex.js
+    queryCache.clear();
     setData(null)
   }
 

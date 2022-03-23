@@ -1,14 +1,12 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
-//1-6- implement full rating feature
-//1-7- update the search feature with react query as well - goto discover.exercise
 
 import * as React from 'react'
-// 1-6-b- 🐨 you'll need useMutation and queryCache from react-query
-// 🐨 you'll also need the client from utils/api-client
-import { useMutation,queryCache } from 'react-query';
-import {client} from 'utils/api-client';
+// import { useMutation,queryCache } from 'react-query';
+// import {client} from 'utils/api-client';
+
+import { useUpdateListItem } from 'utils/list-items.extra-1'
 
 import {FaStar} from 'react-icons/fa'
 import * as colors from 'styles/colors'
@@ -26,18 +24,13 @@ const visuallyHiddenCSS = {
 
 function Rating({listItem, user}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  // 1-6-a- 🐨 call useMutation here and call the function "update"
-  // the mutate function should call the list-items/:listItemId endpoint with a PUT
-  //   and the updates as data. The mutate function will be called with the updates
-  //   you can pass as data.
-  // copy paste the update mutation func of status button here
-  const [update] = useMutation(
-    (updates)=> client(`list-items/${updates.id}`,{method:'PUT',data: updates,token:user.token}),
-    {onSettled: ()=> queryCache.invalidateQueries('list-items')}
-  ) 
-  // 💰 if you want to get the list-items cache updated after this query finishes
-  // the use the `onSettled` config option to queryCache.invalidateQueries('list-items')
-  // const update = () => {}
+
+  // const [update] = useMutation(
+  //   (updates)=> client(`list-items/${updates.id}`,{method:'PUT',data: updates,token:user.token}),
+  //   {onSettled: ()=> queryCache.invalidateQueries('list-items')}
+  // ) 
+  
+  const [update] = useUpdateListItem(user);
 
   React.useEffect(() => {
     function handleKeyDown(event) {

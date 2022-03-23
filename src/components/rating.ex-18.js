@@ -1,15 +1,13 @@
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
-//1-6- implement full rating feature
-//1-7- update the search feature with react query as well - goto discover.exercise
+//1-18- show error on notepad area on request failure of book.ex-18.js,rating.ex-18.js
 
 import * as React from 'react'
-// 1-6-b- 🐨 you'll need useMutation and queryCache from react-query
-// 🐨 you'll also need the client from utils/api-client
-import { useMutation,queryCache } from 'react-query';
-import {client} from 'utils/api-client';
 
+import { useUpdateListItem } from 'utils/list-items.extra-1'
+//1-18-c - import errormessage comp
+import { ErrorMessage } from './lib'
 import {FaStar} from 'react-icons/fa'
 import * as colors from 'styles/colors'
 
@@ -26,18 +24,9 @@ const visuallyHiddenCSS = {
 
 function Rating({listItem, user}) {
   const [isTabbing, setIsTabbing] = React.useState(false)
-  // 1-6-a- 🐨 call useMutation here and call the function "update"
-  // the mutate function should call the list-items/:listItemId endpoint with a PUT
-  //   and the updates as data. The mutate function will be called with the updates
-  //   you can pass as data.
-  // copy paste the update mutation func of status button here
-  const [update] = useMutation(
-    (updates)=> client(`list-items/${updates.id}`,{method:'PUT',data: updates,token:user.token}),
-    {onSettled: ()=> queryCache.invalidateQueries('list-items')}
-  ) 
-  // 💰 if you want to get the list-items cache updated after this query finishes
-  // the use the `onSettled` config option to queryCache.invalidateQueries('list-items')
-  // const update = () => {}
+
+  //1-18-a- get error part
+  const [update,{isError,error}] = useUpdateListItem(user);
 
   React.useEffect(() => {
     function handleKeyDown(event) {
@@ -70,10 +59,7 @@ function Rating({listItem, user}) {
             {
               [`.${rootClassName} &:checked ~ label`]: {color: colors.gray20},
               [`.${rootClassName} &:checked + label`]: {color: 'orange'},
-              // !important is here because we're doing special non-css-in-js things
-              // and so we have to deal with specificity and cascade. But, I promise
-              // this is better than trying to make this work with JavaScript.
-              // So deal with it 😎
+              
               [`.${rootClassName} &:hover ~ label`]: {
                 color: `${colors.gray20} !important`,
               },
@@ -117,6 +103,9 @@ function Rating({listItem, user}) {
       }}
     >
       <span css={{display: 'flex'}}>{stars}</span>
+      {isError ? 
+        <ErrorMessage error={error} variant='inline' css={{marginLeft:6,fontSize:'0.7em'}}/> 
+        : null}
     </div>
   )
 }
