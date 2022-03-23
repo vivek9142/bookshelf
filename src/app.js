@@ -60,3 +60,10 @@ export * from './app.exercise'
 
 //1-21- while add the list in the reading list we're getting some refetching after moving out and refetching the same 
 //list - goto Discover-refactor.js and books.exercise-21.js
+
+//1-22 - while going to all books we need to cache the specific book as well  -  
+//we cached the books in booksearch,not in book query key, we're looking for book in book key while
+//all data is present in booksearch so we'll add all books to book key query - goto books.exercise-21.js,list-items.exercise.js
+
+//1-23- we don't need to wait for rating,notesand mark as read to 
+// be updated we can do this by react query

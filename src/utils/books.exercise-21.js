@@ -2,6 +2,10 @@
 //1-21- while add the list in the reading list we're getting some refetching after moving out and refetching the same 
 //list - so we're removing the cache and prefetching the list items.
 
+//1-22 - while going to all books we need to cache the specific book as well  -  
+//we cached the books in booksearch,not in book query key, we're looking for book in book key while
+//all data is present in booksearch so we'll add all books to book key query
+
 import { useQuery,queryCache } from "react-query";
 import { client } from "./api-client.exercise";
 import bookPlaceholderSvg from 'assets/book-placeholder.svg';
@@ -25,7 +29,17 @@ const loadingBook = {
     queryKey: ['bookSearch',{query}],
         queryFn:() => client(`books?query=${encodeURIComponent(query)}`,{
           token:user.token
-        }).then(data => data.books)
+        }).then(data => data.books),
+        //1-22-a- add config to add all books from search into book key query 
+        config:{
+          onSuccess(books){
+            for(const book of books){
+              //1-22-c- replace this with func already created for this logic
+              // queryCache.setQueryData(['book',{bookId:book.id}],book)
+              setQueryDataForBook(book);
+            }
+          }
+        }
   })
 
   //1-21-g - using the same function created above for refactoring
@@ -80,4 +94,9 @@ function refetchBookSearchQuery(user){
   
 }
 
-export {useBookSearch,useBook,refetchBookSearchQuery}
+//1-22-b- refactoring the data logic comming outof book
+function setQueryDataForBook(book){
+ queryCache.setQueryData(['book',{bookId:book.id}],book)
+}
+//1-22-e - export setQueryDataForBook
+export {useBookSearch,useBook,refetchBookSearchQuery,setQueryDataForBook}
