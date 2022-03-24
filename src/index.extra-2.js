@@ -20,6 +20,7 @@ const queryConfig = {
 loadDevTools(() => {
   ReactDOM.render(
     <ReactQueryConfigProvider config={queryConfig}>
+      {/* //include AuthProvider here */}
       <AuthProvider>
         <App />
       </AuthProvider>

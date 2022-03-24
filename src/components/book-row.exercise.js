@@ -8,9 +8,9 @@ import * as colors from 'styles/colors'
 import {StatusButtons} from './status-buttons'
 import {Rating} from './rating'
 
-// 💣 remove the user prop
+// 1-3-o- 💣 remove the user prop
 // the children components that needed it can get it from context
-function BookRow({user, book}) {
+function BookRow({ book}) {
   const {title, author, coverImageUrl} = book
 
   const listItem = useListItem(book.id)
@@ -75,8 +75,8 @@ function BookRow({user, book}) {
               </h2>
               {listItem?.finishDate ? (
                 <Rating
-                  // 💣 remove the user prop here
-                  user={user}
+                  // 1-3-p-💣 remove the user prop here
+                  // user={user}
                   listItem={listItem}
                 />
               ) : null}
@@ -112,8 +112,8 @@ function BookRow({user, book}) {
         }}
       >
         <StatusButtons
-          // 💣 remove the user prop here
-          user={user}
+          // 1-3-p -💣 remove the user prop here
+          // user={user}
           book={book}
         />
       </div>

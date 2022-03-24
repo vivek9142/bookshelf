@@ -1,3 +1,6 @@
+//app.extra-2 💯 create an `AuthProvider` component goto app.extra-2.js
+//copy all the data most of App.exercise.js data into context module and we can refactor there.
+
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
@@ -58,6 +61,10 @@ function AuthProvider(props) {
 
   if (isSuccess) {
     const value = {user, login, register, logout}
+    // instead of running on succes in prev app.ex we're enclosing the whole app in provider and adding children
+    // return <AuthContext.Provider value={value} {...props} >{children}</AuthContext.Provider>
+
+    //after this  we're provider and its prop value along with it
     return <AuthContext.Provider value={value} {...props} />
   }
 

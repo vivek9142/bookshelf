@@ -1,29 +1,38 @@
+//1-4- remake refetchBookSearchQuery with hooks to remove its dependency with user
+//1-4-a- goto books.ex to make refetchBookSearchQuery as custom hooks
+
 /** @jsx jsx */
 import {jsx} from '@emotion/core'
 
 import * as React from 'react'
 import Tooltip from '@reach/tooltip'
 import {FaSearch, FaTimes} from 'react-icons/fa'
-// 🐨 swap refetchBookSearchQuery with the new useRefetchBookSearchQuery
-import {useBookSearch, refetchBookSearchQuery} from 'utils/books'
+// 1-4-e- 🐨 swap refetchBookSearchQuery with the new useRefetchBookSearchQuery
+import {useBookSearch, useRefetchBookSearchQuery} from 'utils/books'
 import * as colors from 'styles/colors'
 import {BookRow} from 'components/book-row'
 import {BookListUL, Spinner, Input} from 'components/lib'
+import { AuthContext } from 'context/auth-context.exercise'
 
 // 💣 remove the user prop here
-function DiscoverBooksScreen({user}) {
+function DiscoverBooksScreen( ) {
+  //1-3-u- import userfrom authContext 
+  const {user} = React.useContext(AuthContext);
   const [query, setQuery] = React.useState('')
   const [queried, setQueried] = React.useState(false)
-  // 💣 remove the user argument here
-  const {books, error, status} = useBookSearch(query, user)
-  // 🐨 use the new useRefetchBookSearchQuery to get the
+  // 1-2-e- 💣 remove the user argument here
+  const {books, error, status} = useBookSearch(query)
+
+  // 1-4-f-🐨 use the new useRefetchBookSearchQuery to get the
   // refetchBookSearchQuery function which handles accessing the user
+  const refetchBookSearchQuery = useRefetchBookSearchQuery();
 
   React.useEffect(() => {
     // 💣 remove the user prop here
     return () => refetchBookSearchQuery(user)
-    // 💣 remove the user dependency here and add refetchBookSearchQuery instead
-  }, [user])
+    // 1-4-g- 💣 remove the user dependency here and add refetchBookSearchQuery instead and memoi9ze it in books.ex to 
+    // recreate it when user gets updated
+  }, [refetchBookSearchQuery])
 
   const isLoading = status === 'loading'
   const isSuccess = status === 'success'
@@ -97,8 +106,8 @@ function DiscoverBooksScreen({user}) {
             {books.map(book => (
               <li key={book.id} aria-label={book.title}>
                 <BookRow
-                  // 💣 remove the user prop here
-                  user={user}
+                  //1-3-v-  💣 remove the user prop here
+                  // user={user}
                   key={book.id}
                   book={book}
                 />
