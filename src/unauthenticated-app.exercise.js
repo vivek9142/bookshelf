@@ -14,10 +14,14 @@ import {
   // you can remove this now or later when you've finished
   Dialog,
 } from './components/lib'
-// 🐨 import all the Modal compound components you created in ./components/modal
+// 1-1-d-🐨 import all the Modal compound components you created in ./components/modal as if they are existed
+//we'll make those comp later on - goto comp/modal after this
+import {Modal,ModalOpenButton,ModalDismissButton,ModalContents} from './components/modal';
 import {Logo} from './components/logo'
 import {useAuth} from './context/auth-context'
 import {useAsync} from './utils/hooks'
+// import { Modal } from 'bootstrap'
+// import { ModalOpenButton } from 'components/modal.extra-1'
 
 function LoginForm({onSubmit, submitButton}) {
   const {isLoading, isError, error, run} = useAsync()
@@ -124,19 +128,41 @@ function UnauthenticatedApp() {
           gridGap: '0.75rem',
         }}
       >
-        {/* 🐨 replace both of these with the Modal compound components */}
+        {/* 1-1-a- 🐨 replace both of these with the Modal compound components */}
         {/*
           🦉 when you're done, it'll look a lot more complicated than
              it did when you started, but the extra credits will help clean
              things up a bit.
         */}
-        <LoginFormModal
+        <Modal>
+          {/* 1-1-b create modal open btn and in there add buttin for login forms and close btns*/}
+
+          <ModalOpenButton>
+            <Button variant='primary'>Login</Button>
+          </ModalOpenButton>
+          <ModalContents aria-label='Login Form'>
+            {/* 1-1-b create modalcontents and in there  */}
+              <div css={{display: 'flex', justifyContent: 'flex-end'}}>
+            {/* 1-1-c- 💰 here's what you should put in your <ModalDismissButton> */}
+            <ModalDismissButton>
+                <CircleButton>
+                  <VisuallyHidden>Close</VisuallyHidden>
+                  <span aria-hidden>×</span>
+              </CircleButton>
+            </ModalDismissButton>
+            
+        </div>
+        <h3 css={{textAlign: 'center', fontSize: '2em'}}>Login</h3>
+        <LoginForm onSubmit={login} submitButton={<Button variant="primary">Login</Button>} />
+          </ModalContents>
+        </Modal>
+        {/* <LoginFormModal
           onSubmit={login}
           modalTitleText="Login"
           modalLabelText="Login form"
           submitButton={<Button variant="primary">Login</Button>}
           openButton={<Button variant="primary">Login</Button>}
-        />
+        /> */}
         <LoginFormModal
           onSubmit={register}
           modalTitleText="Register"
