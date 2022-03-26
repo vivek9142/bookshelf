@@ -16,6 +16,10 @@ import {
   useRemoveListItem,
   useCreateListItem,
 } from 'utils/list-items'
+
+//extra-5 a- import unstable_trace
+// import {unstable_trace as trace} from 'scheduler/tracing';
+//extra5-2- import trace
 import {trace} from 'components/profiler'
 import * as colors from 'styles/colors'
 import {useAsync} from 'utils/hooks'
@@ -28,6 +32,12 @@ function TooltipButton({label, highlight, onClick, icon, ...rest}) {
     if (isError) {
       reset()
     } else {
+      // extra-5 -b - to trace the interaction we're going to wrap the interaction i'm interested
+      //in and pass that function to trace as third arg, first arg is laberl for interaction,
+      // 2nd arg is when this interaction started i.e, now
+
+      //but on checking the profile in netwrok we don't get the interactions 
+      //since its js set not an array -so goto profiler-extra-4
       trace(`Click ${label}`, performance.now(), () => {
         run(onClick())
       })

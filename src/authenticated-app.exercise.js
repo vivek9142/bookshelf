@@ -157,8 +157,9 @@ function AppRoutes() {
   )
 }
 
-// 🐨 change this to a default export
-export {AuthenticatedApp}
+// 1-1-b- 🐨 change this to a default export and goto authenticated.app.js - 
+// export {AuthenticatedApp}
+export default AuthenticatedApp
 
 // 🐨 Unfortunately, to make this work for our workshop,
 // you need to add this to src/authenticated-app.js:

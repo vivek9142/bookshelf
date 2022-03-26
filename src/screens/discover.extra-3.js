@@ -85,6 +85,8 @@ function DiscoverBooksScreen() {
           </div>
         )}
         {books.length ? (
+          // extra-3-3-a we care about the list here so monitoring the list here with
+          //profiler and send meta as query and books length
           <Profiler
             id="Discover Books Screen Book List"
             metadata={{query, bookCount: books.length}}

@@ -23,6 +23,8 @@ function ListItemList({filterListItems, noListItems, noFilteredListItems}) {
   }
 
   return (
+    // extra3-3-a - monitoring list-item-list with profiler and adding metadata as how many 
+    //list-items we're present in the list
     <Profiler
       id="List Item List"
       metadata={{listItemCount: filteredListItems.length}}

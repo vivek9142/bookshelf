@@ -24,6 +24,10 @@ function BookScreen() {
   const {title, author, coverImageUrl, publisher, synopsis} = book
 
   return (
+    //extra-3-2 a- adding profiler to manage this as well just import profiler and add it to the comp
+    //body also mention different id and also if we want to know which specific id is responsible
+    // for performance issues we can provide it under metadata we can pass it inside Pfoiler comp 
+    // to share it in backend as well
     <Profiler id="Book Screen" metadata={{bookId, listItemId: listItem?.id}}>
       <div>
         <div

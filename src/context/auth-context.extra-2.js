@@ -39,7 +39,11 @@ function AuthProvider(props) {
     const userPromise = getUser()
     run(userPromise)
   }, [run])
-
+  
+  
+  //extra2-b- now after memoizig the values contaning these values it will trigger re-redern since it will
+  //initialize when this function gets loading at every renders
+  //so adding useCallback here to memioze these functions as well
   const login = React.useCallback(
     form => auth.login(form).then(user => setData(user)),
     [setData],
@@ -53,6 +57,8 @@ function AuthProvider(props) {
     setData(null)
   }, [setData])
 
+  // extra-2 a- memoize this func since when this values changes it triggers re-renders of 
+  // provider which will trigger app connected to consumers re-render
   const value = React.useMemo(() => ({user, login, logout, register}), [
     login,
     logout,

@@ -3,8 +3,12 @@ import {client} from 'utils/api-client'
 
 let queue = []
 
+//extra-3- g- sending  the data at 5sec intervals
+// extra3-2- goto book.extra-3.js. 
+// extra3-3- goto list-item-list.extra-3.js and discover.extra-3.js. 
 setInterval(sendProfileQueue, 5000)
 
+//extra-3- f- function to send the data to backend 
 function sendProfileQueue() {
   if (!queue.length) {
     return Promise.resolve({success: true})
@@ -14,10 +18,13 @@ function sendProfileQueue() {
   return client('profile', {data: queueToSend})
 }
 
-// By wrapping the Profile like this, we can set the onRender to whatever
+// extra-3- c- By wrapping the Profile like this, we can set the onRender to whatever
 // we want and we get the additional benefit of being able to include
 // additional data and filter phases
 function Profiler({metadata, phases, ...props}) {
+  
+  // extra-3- d- make func for reporting profile to backend 
+
   function reportProfile(
     id, // the "id" prop of the Profiler tree that has just committed
     phase, // either "mount" (if the tree just mounted) or "update" (if it re-rendered)
@@ -28,6 +35,7 @@ function Profiler({metadata, phases, ...props}) {
     interactions, // the Set of interactions belonging to this update
   ) {
     if (!phases || phases.includes(phase)) {
+      //extra-3- e - add this info to queue
       queue.push({
         metadata,
         id,

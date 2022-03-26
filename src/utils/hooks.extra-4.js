@@ -1,4 +1,7 @@
 import * as React from 'react'
+//extra-5-2-a - import unstable_wrap 
+// import {unstable_wrap as wrap} from 'scheduler/tracing'; 
+//extra-5-02-c- import wrap from profiler 
 import {wrap} from 'components/profiler'
 
 function useSafeDispatch(dispatch) {
@@ -52,6 +55,9 @@ function useAsync(initialState) {
       }
       safeSetState({status: 'pending'})
       return promise.then(
+        //extra5-2-b-  wrap does the same thing as the function inside it does but it allows to associate
+        //the function callback with whatever we're tracing currently  
+        //so we'll wrap it in data and error sections here
         wrap(data => {
           setData(data)
           return data

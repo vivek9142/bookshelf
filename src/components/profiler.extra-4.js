@@ -36,6 +36,7 @@ function Profiler({metadata, phases, ...props}) {
         baseDuration,
         startTime,
         commitTime,
+        //extra-5- c- convert set to array
         interactions: [...interactions],
       })
     }
@@ -44,4 +45,5 @@ function Profiler({metadata, phases, ...props}) {
 }
 
 export {Profiler}
+//extra5-2- export unstable_trace and unstable_wraqp as trace,wrap
 export {unstable_trace as trace, unstable_wrap as wrap} from 'scheduler/tracing'
