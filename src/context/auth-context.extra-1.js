@@ -14,6 +14,9 @@ async function bootstrapAppData() {
 
   const token = await auth.getToken()
   if (token) {
+    //extra1 - replace me with bootstrap since backend  users have made an resp 
+    //through which al data along with users will be received.
+    // const data = await client('me', {token})
     const data = await client('bootstrap', {token})
     queryCache.setQueryData('list-items', data.listItems, {
       staleTime: 5000,
