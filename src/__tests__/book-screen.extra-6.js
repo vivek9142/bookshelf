@@ -139,6 +139,11 @@ test('can mark a list item as read', async () => {
 })
 
 test('can edit a note', async () => {
+  // since we have debounce delay of 300ms to savethe data and we need to wait for 300ms to
+  // save to DB and we can test it . so we can fake timer so we can test it earlier and we don't 
+  //need to wait for 300ms to test it .but for fake timer we need  to reset it i.e, use realtimers 
+  //before each test
+  
   // using fake timers to skip debounce time
   jest.useFakeTimers()
   const {listItem} = await renderBookScreen()
@@ -149,13 +154,13 @@ test('can edit a note', async () => {
   userEvent.clear(notesTextarea)
   userEvent.type(notesTextarea, newNotes)
 
-  // wait for the loading spinner to show up
+  // wait for the loading spinner to show up and not the previous loading
   await screen.findByLabelText(/loading/i)
   // wait for the loading spinner to go away
   await waitForLoadingToFinish()
 
   expect(notesTextarea).toHaveValue(newNotes)
-
+  //checking the DB if the data is stored there
   expect(await listItemsDB.read(listItem.id)).toMatchObject({
     notes: newNotes,
   })

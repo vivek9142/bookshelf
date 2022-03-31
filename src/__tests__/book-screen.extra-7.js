@@ -165,6 +165,11 @@ test('can edit a note', async () => {
 })
 
 describe('console errors', () => {
+  //after getting the error in console though the test is passing 
+  //we can use jes.spyOn conosle and do nothing and after this test we can restore it 
+  // but if we do the spying in the test itself the restore mock will explode so we can 
+  //the whole block inside describe and this whole spy and restore will remain inside this block only
+  
   beforeAll(() => {
     jest.spyOn(console, 'error').mockImplementation(() => {})
   })
